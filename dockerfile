@@ -22,18 +22,18 @@ RUN apt install -y libze-intel-gpu-raytracing
 
 #! Python
 # Default Python3
-RUN add-apt-repository -y ppa:deadsnakes/ppa \
-    && apt install -y python3 python3-venv python3-pip
-#  Miniconda
-RUN mkdir -p ~/miniconda3 \
-    && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh \
-    && bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 \
-    && rm ~/miniconda3/miniconda.sh
-ENV PATH="~/miniconda3/bin:$PATH"
-RUN ~/miniconda3/bin/conda init
+RUN add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt install -y python3 python3-venv python3-pip
+# Install Miniconda
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p /opt/conda && \
+    rm miniconda.sh
+ENV PATH="/opt/conda/bin:$PATH"
+RUN conda init --all
+
 
 # Clean Temp Files
 # RUN apt clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /workspace
+#WORKDIR /workspace
 CMD ["/bin/bash"]
