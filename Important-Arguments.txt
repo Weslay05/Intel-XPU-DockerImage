@@ -2,6 +2,13 @@
 
 # For Device Drivers
 --device /dev/dri
+--privileged
+
+# For inter process memory communication
+-shm 4g
+-ipc host
+
+--network ["bridge", "host", "..."]
 
 -v path-or-volume:mount-point
 -w working-dir
