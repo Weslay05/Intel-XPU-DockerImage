@@ -1,5 +1,8 @@
 --index-url https://download.pytorch.org/whl/xpu
 --extra-index-url https://pypi.org/simple
+
+-r common.txt
+
 intel-cmplr-lib-rt
 intel-cmplr-lib-ur
 intel-cmplr-lic-rt
@@ -8,7 +11,5 @@ pytorch-triton-xpu
 tcmlib
 umf
 intel-pti
-
--r common.txt
 
 # Up-to-Date one liner : torch torchvision torchaudio intel-cmplr-lib-rt intel-cmplr-lib-ur intel-cmplr-lic-rt intel-sycl-rt pytorch-triton-xpu tcmlib umf intel-pti --index-url https://download.pytorch.org/whl/xpu --extra-index-url https://pypi.org/simple
