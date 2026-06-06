@@ -81,7 +81,7 @@ docker run -it \
   --mount type=bind,src="/path/to/Models",dst="/media/Models" \
   --mount type=bind,src="/path/to/project",dst="/workspace" \
   -w /workspace \
-  arc-xpu-env # \
+  xpu-ai-env:latest # \
 # bash -c "chmod +x ./src/bin/test.sh; \
 # exec /workspace/src/bin/test.sh"
 ```
