@@ -1,5 +1,7 @@
 FROM ubuntu:25.10
 
+ARG TARGETARCH
+
 #! Basics
 
 # Update APT Repos
@@ -34,18 +36,35 @@ RUN apt install -y libze-intel-gpu-raytracing
 RUN add-apt-repository -y ppa:deadsnakes/ppa && \
     apt install -y python3 python3-venv python3-pip
 
-# Install Miniconda
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
-    bash miniconda.sh -b -p /opt/conda && \
-    rm miniconda.sh
-ENV PATH="/opt/conda/bin:$PATH"
-RUN conda init --all
+# # Install Miniconda
+# RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+#     bash miniconda.sh -b -p /opt/conda && \
+#     rm miniconda.sh
+# ENV PATH="/opt/conda/bin:$PATH"
+# RUN conda init --all
+
+# Install Miniforge
+RUN if [ "$TARGETARCH" = "amd64" ]; \
+        then MINIFORGE_ARCH="x86_64"; \
+    elif [ "$TARGETARCH" = "arm64" ]; \
+        then MINIFORGE_ARCH="aarch64"; \
+    else \
+        echo "Unsupported architecture: $TARGETARCH" && exit 1; \
+    fi && \
+        wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh" -O miniforge.sh && \
+        bash miniforge.sh -b -p /opt/conda && \
+        rm miniforge.sh
 
 # Clean Temp Files
-# RUN apt clean && rm -rf /var/lib/apt/lists/*
+RUN apt clean && rm -rf /var/lib/apt/lists/*
 
 
 #! For Interactive Mode
 
+# Conda
+ENV PATH="/opt/conda/bin:$PATH"
+RUN conda init --all
+
+# Basic
 #WORKDIR /workspace
 CMD ["/bin/bash"]

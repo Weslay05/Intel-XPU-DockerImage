@@ -2,6 +2,7 @@
     "cSpell.words": [
         "clinfo",
         "cmplr",
+        "elif",
         "getent",
         "Huggingface",
         "kobuk",
@@ -10,11 +11,13 @@
         "libva",
         "libvpl",
         "libze",
+        "Miniforge",
         "ocloc",
         "sycl",
         "tcmlib",
         "torchaudio",
         "torchvision",
-        "vainfo"
+        "vainfo",
+        "venv"
     ]
 }
