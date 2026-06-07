@@ -82,6 +82,6 @@ docker run -it \
   --mount type=bind,src="/path/to/project",dst="/workspace" \
   -w /workspace \
   xpu-ai-env:latest # \
-# bash -c "chmod +x ./src/bin/test.sh; \
-# exec /workspace/src/bin/test.sh"
+#  bash -c "chmod +x ./src/bin/test.sh; \
+#  exec /workspace/src/bin/test.sh"
 ```
