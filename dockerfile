@@ -8,7 +8,7 @@ ARG TARGETARCH
 RUN apt update -y && apt upgrade -y
 
 # Install Basic Tools
-RUN apt install -y software-properties-common gpg wget git
+RUN apt install -y software-properties-common gpg wget git curl
 
 
 #! Intel ARC
@@ -37,11 +37,16 @@ RUN add-apt-repository -y ppa:deadsnakes/ppa && \
     apt install -y python3 python3-venv python3-pip
 
 # # Install Miniconda
-# RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
-#     bash miniconda.sh -b -p /opt/conda && \
-#     rm miniconda.sh
-# ENV PATH="/opt/conda/bin:$PATH"
-# RUN conda init --all
+# RUN if [ "$TARGETARCH" = "amd64" ]; \
+#         then MINIFORGE_ARCH="x86_64"; \
+#     elif [ "$TARGETARCH" = "arm64" ]; \
+#         then MINIFORGE_ARCH="aarch64"; \
+#     else \
+#         echo "Unsupported architecture: $TARGETARCH" && exit 1; \
+#     fi && \
+#         curl -fsSL "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${MINIFORGE_ARCH}.sh" -o miniconda.sh && \
+#         bash miniconda.sh -b -p /opt/conda && \
+#         rm miniconda.sh
 
 # Install Miniforge
 RUN if [ "$TARGETARCH" = "amd64" ]; \
@@ -51,9 +56,15 @@ RUN if [ "$TARGETARCH" = "amd64" ]; \
     else \
         echo "Unsupported architecture: $TARGETARCH" && exit 1; \
     fi && \
-        wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh" -O miniforge.sh && \
-        bash miniforge.sh -b -p /opt/conda && \
+        curl -fsSL "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh" -o miniforge.sh && \
+        sh miniforge.sh -b -p /opt/conda && \
         rm miniforge.sh
+
+# Install zsh & oh-my-zsh
+RUN apt -y install zsh && \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+# Set the default shell to zsh
+ENV SHELL=/bin/zsh
 
 # Clean Temp Files
 RUN apt clean && rm -rf /var/lib/apt/lists/*
@@ -61,10 +72,9 @@ RUN apt clean && rm -rf /var/lib/apt/lists/*
 
 #! For Interactive Mode
 
-# Conda
-ENV PATH="/opt/conda/bin:$PATH"
-RUN conda init --all
+# ENV PATH="$PATH:/opt/conda/bin"
+# RUN conda init --all
 
 # Basic
-#WORKDIR /workspace
-CMD ["/bin/bash"]
+WORKDIR /workspace
+CMD ["/bin/zsh"]

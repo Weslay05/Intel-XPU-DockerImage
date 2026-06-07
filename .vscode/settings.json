@@ -12,6 +12,7 @@
         "libvpl",
         "libze",
         "Miniforge",
+        "nixos",
         "ocloc",
         "sycl",
         "tcmlib",
