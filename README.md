@@ -69,15 +69,17 @@ Full one for use with Huggingface and it's cache.
 
 ```bash
 #!/usr/bin/env bash
+
 HF_TOKEN=$1
+HF_CACHE="/path/to/.cache/huggingface"
 
 docker run -it \
   --name test-xpu \
   --device /dev/dri \
   --ipc host \
   -e HF_TOKEN=$HF_TOKEN \
-  -e HF_HOME="/path/to/cache" \
-  --mount type=bind,src="/path/to/.cache/huggingface",dst="/media/.cache/huggingface" \
+  -e HF_HOME="/media/.cache/huggingface" \
+  --mount type=bind,src=$HF_CACHE,dst="/media/.cache/huggingface" \
   --mount type=bind,src="/path/to/Models",dst="/media/Models" \
   --mount type=bind,src="/path/to/project",dst="/workspace" \
   -w /workspace \
