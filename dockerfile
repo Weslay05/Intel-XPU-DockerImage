@@ -95,8 +95,5 @@ RUN echo "source /opt/intel/oneapi/setvars.sh" | tee -a ~/.bashrc ~/.zshrc > /de
 
 #! Basic
 
-# Clear Temp Files
-RUN apt clean && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /workspace
 CMD ["/bin/zsh"]
