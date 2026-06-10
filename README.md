@@ -6,6 +6,8 @@ Resolves Drivers, APT Packages and some Python requirements.
 
 [Intel-Official-Information](https://www.intel.com/content/www/us/en/developer/articles/tool/pytorch-prerequisites-for-intel-gpu/2-13.html)
 
+## Building
+
 To **Build** run
 
 ```bash
@@ -14,6 +16,8 @@ docker build \
   -t xpu-ai-env:25.10 \
   .
 ```
+
+It's a bit large with the entire oneAPI environment, though many don't use the oneAPI Toolkit.
 
 ## Docker Arguments
 

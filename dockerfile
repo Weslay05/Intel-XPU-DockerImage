@@ -2,19 +2,40 @@ FROM ubuntu:25.10
 
 ARG TARGETARCH
 
-#! Basics
+
+#! Basic
 
 # Update APT Repos
 RUN apt update -y && apt upgrade -y
 
 # Install Basic Tools
-RUN apt install -y software-properties-common gpg wget git curl
+RUN apt install -y \
+    software-properties-common \
+    gpg gnupg \
+    wget curl \
+    git \
+    ca-certificates
 
 
-#! Intel ARC
+#! APT: Package Archives
 
-# Add ARC Repository
-RUN add-apt-repository -y ppa:kobuk-team/intel-graphics
+# Add Intel Graphics Repository
+RUN add-apt-repository -y ppa:kobuk-team/intel-graphics && apt update -y
+
+# Add Intel oneapi Repository
+RUN curl -fsSL "https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB" | \
+        gpg --dearmor -o /usr/share/keyrings/oneapi-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | \
+        tee /etc/apt/sources.list.d/oneAPI.list > /dev/null && \
+    apt update -y
+
+RUN apt upgrade -y
+
+
+#! APT: Install Packages
+
+# Intel oneapi toolkit
+RUN apt install -y intel-basekit intel-oneapi-toolkit
 
 # Compute Related Packages
 RUN apt install -y libze-intel-gpu1 libze1 intel-metrics-discovery intel-opencl-icd clinfo intel-gsc libigc-dev
@@ -30,7 +51,7 @@ RUN apt install -y libze-intel-gpu-raytracing
 # intel-level-zero-gpu level-zero
 
 
-#! Python
+#! Install Python
 
 # Default Python3
 RUN add-apt-repository -y ppa:deadsnakes/ppa && \
@@ -49,6 +70,7 @@ RUN add-apt-repository -y ppa:deadsnakes/ppa && \
 #         rm miniconda.sh
 
 # Install Miniforge
+ENV MAMBA_ROOT_PREFIX=/opt/conda
 RUN if [ "$TARGETARCH" = "amd64" ]; \
         then MINIFORGE_ARCH="x86_64"; \
     elif [ "$TARGETARCH" = "arm64" ]; \
@@ -60,21 +82,23 @@ RUN if [ "$TARGETARCH" = "amd64" ]; \
         sh miniforge.sh -b -p /opt/conda && \
         rm miniforge.sh
 
-# Install zsh & oh-my-zsh
-RUN apt -y install zsh && \
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-# Set the default shell to zsh
-ENV SHELL=/bin/zsh
-
-# Clean Temp Files
-RUN apt clean && rm -rf /var/lib/apt/lists/*
-
 
 #! For Interactive Mode
 
-# ENV PATH="$PATH:/opt/conda/bin"
-# RUN conda init --all
+# Install zsh & oh-my-zsh
+RUN apt -y install zsh && \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+ENV SHELL=/bin/zsh
 
-# Basic
+RUN echo "source /opt/intel/oneapi/setvars.sh" | tee -a ~/.bashrc ~/.zshrc > /dev/null
+#RUN echo "source /opt/conda/etc/profile.d/conda.sh" | tee -a ~/.bashrc ~/.zshrc > /dev/null
+#RUN echo "source /opt/conda/etc/profile.d/mamba.sh" | tee -a ~/.bashrc ~/.zshrc > /dev/null
+
+
+#! Basic
+
+# Clear Temp Files
+RUN apt clean && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /workspace
 CMD ["/bin/zsh"]

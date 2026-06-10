@@ -1,10 +1,13 @@
 {
     "cSpell.words": [
+        "basekit",
         "clinfo",
         "cmplr",
+        "dearmor",
         "elif",
         "getent",
         "Huggingface",
+        "keyrings",
         "kobuk",
         "libigc",
         "libmfx",
@@ -14,6 +17,8 @@
         "Miniforge",
         "nixos",
         "ocloc",
+        "oneapi",
+        "setvars",
         "sycl",
         "tcmlib",
         "torchaudio",
