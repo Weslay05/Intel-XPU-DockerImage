@@ -55,19 +55,7 @@ Volumes & mounting/binding *(See [Docker-Docs](https://docs.docker.com/engine/st
 
 Specific working directory : `-w working-dir`
 
-## Docker command example
-
-**Conda use** in Scripts or generally for this Docker Image:
-
-```bash
-#!/usr/bin/env bash
-
-# Conda Environment
-source /opt/conda/etc/profile.d/conda.sh
-conda activate ./nixos-conda
-
-cd project # Optional
-```
+## Example: Docker Usage
 
 Full one for use with Huggingface and it's cache.
 
@@ -90,4 +78,26 @@ docker run -it \
   xpu-ai-env:latest # \
 #  bash -c "chmod +x ./src/bin/test.sh; \
 #  exec /workspace/src/bin/test.sh"
+```
+
+**Conda use** in Scripts or generally for this Docker Image:
+
+```bash
+#!/usr/bin/env bash
+
+# Conda Environment
+source /opt/conda/etc/profile.d/conda.sh
+conda activate ./nixos-conda
+
+cd project # Optional
+```
+
+## Example: Building Large Wheels
+
+```bash
+export CMAKE_BUILD_PARALLEL_LEVEL=4 # Important for RAM (2-4 GB per Worker)
+export MAX_JOBS=4
+# Sometimes pytorch is also needed before
+uv pip install scikit_build_core # Sometimes needed before like here
+uv build --no-build-isolation --wheel .
 ```
