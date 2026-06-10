@@ -12,8 +12,8 @@ To **Build** run
 
 ```bash
 docker build \
-  -t xpu-ai-env:latest \
-  -t xpu-ai-env:25.10 \
+  -t intel-xpu:latest \
+  -t intel-xpu:dev-ubuntu25.10 \
   .
 ```
 
@@ -75,7 +75,7 @@ docker run -it \
   --mount type=bind,src="/path/to/Models",dst="/media/Models" \
   --mount type=bind,src="/path/to/project",dst="/workspace" \
   -w /workspace \
-  xpu-ai-env:latest # \
+  intel-xpu:latest # \
 #  bash -c "chmod +x ./src/bin/test.sh; \
 #  exec /workspace/src/bin/test.sh"
 ```
