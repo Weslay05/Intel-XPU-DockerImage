@@ -57,13 +57,12 @@ Specific working directory : `-w working-dir`
 
 ## Example: Docker Usage
 
-Full one for use with Huggingface and it's cache.
+Full one for use with Huggingface and it's cache. *(`-w /workspace` is default)*
 
 ```bash
 #!/usr/bin/env bash
 
 HF_TOKEN=$1
-HF_CACHE="/path/to/.cache/huggingface"
 
 docker run -it \
   --name test-xpu \
@@ -71,10 +70,9 @@ docker run -it \
   --ipc host \
   -e HF_TOKEN=$HF_TOKEN \
   -e HF_HOME="/media/.cache/huggingface" \
-  --mount type=bind,src=$HF_CACHE,dst="/media/.cache/huggingface" \
+  --mount type=bind,src="/path/to/.cache",dst="/media/.cache" \
   --mount type=bind,src="/path/to/Models",dst="/media/Models" \
   --mount type=bind,src="/path/to/project",dst="/workspace" \
-  -w /workspace \
   intel-xpu:latest # \
 #  bash -c "chmod +x ./src/bin/test.sh; \
 #  exec /workspace/src/bin/test.sh"
