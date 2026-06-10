@@ -1,20 +1,17 @@
 FROM ubuntu:25.10
 
-ARG TARGETARCH
-
-
 #! Basic
 
-# Update APT Repos
-RUN apt update -y && apt upgrade -y
+# For Python installation later
+ARG TARGETARCH 
 
-# Install Basic Tools
-RUN apt install -y \
-    software-properties-common \
-    gpg gnupg \
-    wget curl \
-    git \
-    ca-certificates
+# APT: Install Basic Packages
+RUN apt update -y && apt install -y \
+        software-properties-common \
+        gnupg \
+        wget curl \
+        git \
+        ca-certificates
 
 
 #! APT: Package Archives
@@ -29,10 +26,11 @@ RUN curl -fsSL "https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-
         tee /etc/apt/sources.list.d/oneAPI.list > /dev/null && \
     apt update -y
 
-RUN apt upgrade -y
-
 
 #! APT: Install Packages
+
+# Useful
+RUN apt install -y cmake
 
 # Intel oneapi toolkit
 RUN apt install -y intel-basekit intel-oneapi-toolkit
@@ -51,7 +49,7 @@ RUN apt install -y libze-intel-gpu-raytracing
 # intel-level-zero-gpu level-zero
 
 
-#! Install Python
+#! Python
 
 # Default Python3
 RUN add-apt-repository -y ppa:deadsnakes/ppa && \
