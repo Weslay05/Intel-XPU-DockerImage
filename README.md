@@ -6,18 +6,49 @@ Resolves Drivers, APT Packages and some Python requirements.
 
 [Intel-Official-Information](https://www.intel.com/content/www/us/en/developer/articles/tool/pytorch-prerequisites-for-intel-gpu/2-13.html)
 
+## Usage / Important
+
+Mamba Conda and oneAPI are not auto initiated, just run :
+
+- For **Conda**: `source /opt/conda/etc/profile.d/conda.sh`
+- For **Mamba**: `source /opt/conda/etc/profile.d/mamba.sh`
+- For **oneapi**: `source /opt/intel/oneapi/${ONEAPI_VERSION}/oneapi-vars.sh`
+
+Or if automatically wanted uncomment lines in Dockerfile location is the line `#! For Interactive Mode`.
+
 ## Building
 
-To **Build** run
+**Important for PyTorch Building:**
+
+- **`PyTorch 2.13`** requires **`oneapi 2026.0`**
+- **`PyTorch == 2.12.*`** requires **`oneapi 2025.3`**
+
+To **Build** run.
 
 ```bash
 docker build \
   -t intel-xpu:latest \
-  -t intel-xpu:dev-ubuntu25.10 \
+  -t intel-xpu:oneapi_2026.0-ubuntu25.10 \
   .
 ```
 
-It's a bit large with the entire oneAPI environment, though many don't use the oneAPI Toolkit.
+For other oneAPI Versions set **ONEAPI_VERSION** for example:
+
+```bash
+docker build \
+  --build-arg ONEAPI_VERSION="2025.3" \
+  -t intel-xpu:oneapi_2025.3-ubuntu25.10 \
+  .
+```
+
+And without the heavy oneAPI toolkit.
+
+```bash
+docker build \
+  --build-arg ONEAPI_VERSION="NONE" \
+  -t intel-xpu:runtime-ubuntu25.10 \
+  .
+```
 
 ## Docker Arguments
 
@@ -96,6 +127,6 @@ cd project # Optional
 export CMAKE_BUILD_PARALLEL_LEVEL=4 # Important for RAM (2-4 GB per Worker)
 export MAX_JOBS=4
 # Sometimes pytorch is also needed before
-uv pip install scikit_build_core # Sometimes needed before like here
+uv pip install scikit_build_core # Sometimes needed before, like shown here.
 uv build --no-build-isolation --wheel .
 ```

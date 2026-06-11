@@ -4,6 +4,8 @@
         "clinfo",
         "cmplr",
         "dearmor",
+        "dpcpp",
+        "dpkg",
         "elif",
         "getent",
         "Huggingface",
