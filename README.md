@@ -124,6 +124,7 @@ cd project # Optional
 ## Example: Building Large Wheels
 
 ```bash
+export UV_CACHE_DIR="/media/.cache/uv-oneapi_${ONEAPI_VERSION}" # Useful for not building multiple times
 export CMAKE_BUILD_PARALLEL_LEVEL=4 # Important for RAM (2-4 GB per Worker)
 export MAX_JOBS=4
 # Sometimes pytorch is also needed before
