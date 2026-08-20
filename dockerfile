@@ -1,10 +1,10 @@
-FROM ubuntu:25.10
+FROM ubuntu:24.04
 
 # For Python installation later
 ARG TARGETARCH
 
 # Default to `oneapi 2026.0`
-ARG ONEAPI_VERSION="2026.0"
+ARG ONEAPI_VERSION="2026.1"
 ENV ONEAPI_VERSION=${ONEAPI_VERSION}
 
 # APT: Install Basic Packages

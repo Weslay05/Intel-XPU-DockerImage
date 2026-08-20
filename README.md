@@ -20,7 +20,7 @@ Or if automatically wanted uncomment lines in Dockerfile location is the line `#
 
 **Important for PyTorch Building:**
 
-- **`PyTorch 2.13`** requires **`oneapi 2026.0`**
+- **`PyTorch 2.13`** requires **`oneapi 2026.*`**
 - **`PyTorch == 2.12.*`** requires **`oneapi 2025.3`**
 
 To **Build** run.
@@ -33,12 +33,13 @@ docker build \
 ```
 
 For other oneAPI Versions set **ONEAPI_VERSION** for example:
+Tested: [ "2025.3", "2026.0", "2026.1" ]
 
 ```bash
-export ONEAPI_VERSION="2025.3"
+export ONEAPI_VERSION="2026.1"
 docker build \
   --build-arg ONEAPI_VERSION="${ONEAPI_VERSION}" \
-  -t intel-xpu:ubuntu-25.10_oneapi-${ONEAPI_VERSION} \
+  -t intel-xpu:ubuntu-24.04_oneapi-${ONEAPI_VERSION} \
   .
 ```
 
@@ -47,7 +48,7 @@ And without the heavy oneAPI toolkit.
 ```bash
 docker build \
   --build-arg ONEAPI_VERSION="NONE" \
-  -t intel-xpu:runtime_ubuntu-25.10 \
+  -t intel-xpu:runtime_ubuntu-24.04 \
   .
 ```
 
