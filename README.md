@@ -28,7 +28,7 @@ To **Build** run.
 ```bash
 docker build \
   -t intel-xpu:latest \
-  -t intel-xpu:ubuntu-25.10_oneapi-2026.0 \
+  -t intel-xpu:ubuntu-26.04_oneapi-2026.1 \
   .
 ```
 
@@ -39,7 +39,7 @@ Tested: [ "2025.3", "2026.0", "2026.1" ]
 export ONEAPI_VERSION="2026.1"
 docker build \
   --build-arg ONEAPI_VERSION="${ONEAPI_VERSION}" \
-  -t intel-xpu:ubuntu-24.04_oneapi-${ONEAPI_VERSION} \
+  -t intel-xpu:ubuntu-26.04_oneapi-${ONEAPI_VERSION} \
   .
 ```
 
@@ -48,7 +48,7 @@ And without the heavy oneAPI toolkit.
 ```bash
 docker build \
   --build-arg ONEAPI_VERSION="NONE" \
-  -t intel-xpu:runtime_ubuntu-24.04 \
+  -t intel-xpu:runtime_ubuntu-26.04 \
   .
 ```
 
