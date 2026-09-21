@@ -8,7 +8,7 @@ ARG ONEAPI_VERSION="2026.1"
 ENV ONEAPI_VERSION=${ONEAPI_VERSION}
 
 # APT: Install Basic Packages
-RUN apt update -y && apt install -y \
+RUN apt-get update -y && apt-get install -y \
         software-properties-common \
         gnupg dpkg \
         wget curl \
@@ -19,7 +19,7 @@ RUN apt update -y && apt install -y \
 #! APT: Add Repositories
 
 # Intel Graphics Repository
-RUN add-apt-repository -y ppa:kobuk-team/intel-graphics && apt update -y
+RUN add-apt-repository -y ppa:kobuk-team/intel-graphics && apt-get update -y
 
 # Intel oneapi Repository
 RUN if [ "${ONEAPI_VERSION}" = "NONE" ]; then \
@@ -29,7 +29,7 @@ RUN if [ "${ONEAPI_VERSION}" = "NONE" ]; then \
             gpg --dearmor -o /usr/share/keyrings/oneapi-archive-keyring.gpg && \
         echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | \
             tee /etc/apt/sources.list.d/oneAPI.list > /dev/null && \
-        apt update -y; \
+        apt-get update -y; \
     fi
 
 
@@ -39,20 +39,20 @@ RUN if [ "${ONEAPI_VERSION}" = "NONE" ]; then \
         echo "Skipping installing cmake, because ONEAPI_VERSION=${ONEAPI_VERSION}"; \
     else \
         echo "Installing cmake because of a oneAPI toolkit version" && \
-        apt install -y cmake; \
+        apt-get install -y cmake; \
     fi
 
 
 #! Install: Intel Drivers
 
 # Compute Related Packages
-RUN apt install -y libze-intel-gpu1 libze1 intel-metrics-discovery intel-opencl-icd clinfo intel-gsc libigc-dev
+RUN apt-get install -y libze-intel-gpu1 libze1 intel-metrics-discovery intel-opencl-icd clinfo intel-gsc libigc-dev
 # Media Related Packages
-RUN apt install -y intel-media-va-driver-non-free libmfx-gen1 libvpl2 libvpl-tools libva-glx2 va-driver-all vainfo
+RUN apt-get install -y intel-media-va-driver-non-free libmfx-gen1 libvpl2 libvpl-tools libva-glx2 va-driver-all vainfo
 # Required for PyTorch
-RUN apt install -y libze-dev intel-ocloc
+RUN apt-get install -y libze-dev intel-ocloc
 # For RayTracing
-RUN apt install -y libze-intel-gpu-raytracing
+RUN apt-get install -y libze-intel-gpu-raytracing
 
 
 #! Install: Intel oneapi Toolkit
@@ -71,7 +71,7 @@ RUN if [ "${ONEAPI_VERSION}" = "NONE" ]; then \
     fi
 
 # TODO: Auto installed?
-# RUN apt install -y \
+# RUN apt-get install -y \
 #     intel-oneapi-compiler-dpcpp-cpp-2025.3
 
 
@@ -79,7 +79,7 @@ RUN if [ "${ONEAPI_VERSION}" = "NONE" ]; then \
 
 # Default Python3
 RUN add-apt-repository -y ppa:deadsnakes/ppa && \
-    apt install -y python3 python3-venv python3-pip
+    apt-get install -y python3 python3-venv python3-pip
 
 # # Install Miniconda
 # RUN if [ "$TARGETARCH" = "amd64" ]; \
@@ -110,7 +110,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; \
 #! For Interactive Mode
 
 # Install zsh & oh-my-zsh
-RUN apt -y install zsh && \
+RUN apt-get -y install zsh && \
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ENV SHELL=/bin/zsh
 
